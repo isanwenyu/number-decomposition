@@ -7,7 +7,7 @@ import { StarShape } from './shapes/StarShape';
 export type ShapeType = 'circle' | 'square' | 'heart' | 'star';
 
 interface NumberNodeProps {
-  number: number;
+  number: string;
   cx: number;
   cy: number;
   size: number;

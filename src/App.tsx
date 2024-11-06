@@ -7,6 +7,7 @@ function App() {
   const [maxNumber, setMaxNumber] = useState(5);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedShape, setSelectedShape] = useState<ShapeType>('heart');
+  const [showSolution, setShowSolution] = useState(true); // 新增的属性
 
   const shapes: { value: ShapeType; label: string }[] = [
     { value: 'circle', label: 'Circle' },
@@ -17,11 +18,14 @@ function App() {
 
   const allDecompositions = Array.from({ length: maxNumber }, (_, i) => i + 1)
     .flatMap(n => {
-      const pairs: { number: number; left: number; right: number }[] = [];
+      const pairs: { number: string; left: string; right: string }[] = [];
         for (let i = 1; i < n; i++) {
           if (i + (n - i) === n) {
-            pairs.push({ number: n, left: "", right: "" });
-            // pairs.push({ number: n, left: i, right: n - i });
+            if(showSolution){
+               pairs.push({ number: n.toString(), left: `${i}`, right: `${n - i}` });
+            }else{
+              pairs.push({ number: n.toString(), left: "", right: "" });
+            }
           }
         }
       return pairs;
@@ -94,6 +98,17 @@ function App() {
                   </button>
                 ))}
               </div>
+            </div>       
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Show Solution
+              </label>
+              <input
+                type="checkbox"
+                checked={showSolution}
+                onChange={() => setShowSolution(!showSolution)}
+                className="rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
             </div>
           </div>
         </div>

@@ -2,9 +2,9 @@ import React from 'react';
 import { NumberNode, ShapeType } from './NumberNode';
 
 interface NumberTreeProps {
-  number: number;
-  left: number;
-  right: number;
+  number: string;
+  left: string;
+  right: string;
   shape: ShapeType;
 }
 
