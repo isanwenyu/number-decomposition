@@ -14,8 +14,8 @@ export const NumberTree: React.FC<NumberTreeProps> = ({
   right,
   shape 
 }) => {
-  const treeWidth = 120;
-  const treeHeight = 140;
+  const treeWidth = 100;
+  const treeHeight = 110;
   const nodeRadius = 20;
   const strokeWidth = 2;
 
