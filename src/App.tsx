@@ -8,12 +8,13 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [selectedShape, setSelectedShape] = useState<ShapeType>('heart');
   const [showSolution, setShowSolution] = useState(true); // 新增的属性
+  const [numQuestions, setNumQuestions] = useState(100); // 新增的属性
 
   const shapes: { value: ShapeType; label: string }[] = [
-    { value: 'circle', label: 'Circle' },
-    { value: 'square', label: 'Square' },
-    { value: 'heart', label: 'Heart' },
-    { value: 'star', label: 'Star' },
+    { value: 'circle', label: '圆形' },
+    { value: 'square', label: '方形' },
+    { value: 'heart', label: '心形' },
+    { value: 'star', label: '五角形' },
   ];
 
   const allDecompositions = Array.from({ length: maxNumber }, (_, i) => i + 1)
@@ -29,7 +30,16 @@ function App() {
           }
         }
       return pairs;
-    }).sort(() => 0.5 - Math.random());
+    }).slice(0, numQuestions).sort(() => 0.5 - Math.random());
+  //使用numQuestions控制题目数量
+  //如果numQuestions大于等于allDecompositions的长度，补充题目
+  if (numQuestions > allDecompositions.length) {
+    const diff = numQuestions - allDecompositions.length;
+    for (let i = 0; i < diff; i++) {
+      const randomIndex = Math.floor(Math.random() * allDecompositions.length);
+      allDecompositions.push(allDecompositions[randomIndex]);
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f5f7]">
@@ -37,7 +47,7 @@ function App() {
       <header className="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 border-b border-gray-200">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">
-            Number Decomposition
+            数的分解
           </h1>
           <button
             onClick={() => setShowSettings(!showSettings)}
@@ -57,7 +67,7 @@ function App() {
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Settings</h2>
+            <h2 className="text-xl font-semibold text-gray-900">设置</h2>
             <button
               onClick={() => setShowSettings(false)}
               className="p-2 text-gray-600 hover:text-gray-800 rounded-full hover:bg-gray-100"
@@ -68,7 +78,7 @@ function App() {
           <div className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Maximum Number (1-10)
+                最大数 (1-10)
               </label>
               <input
                 type="number"
@@ -81,7 +91,7 @@ function App() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Node Shape
+                节点形状
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {shapes.map((shape) => (
@@ -101,13 +111,25 @@ function App() {
             </div>       
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Show Solution
+                显示题解
               </label>
               <input
                 type="checkbox"
                 checked={showSolution}
                 onChange={() => setShowSolution(!showSolution)}
                 className="rounded border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
+            </div>   
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+              题目数量
+              </label>
+              <input
+                type="number"
+                min="1"
+                value={numQuestions}
+                onChange={(e) => setNumQuestions(Math.max(1, parseInt(e.target.value) || 1))}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
               />
             </div>
           </div>
@@ -116,6 +138,11 @@ function App() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 pt-24 pb-8">
+      <div className="text-center font-bold" >{maxNumber}以内的分解</div>
+        <div className="flex items-center justify-between mb-10 font-bold">
+            <div>姓名：__________</div>
+            <div>分数：_________</div>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
           {allDecompositions.map((decomp, index) => (
             <div 
