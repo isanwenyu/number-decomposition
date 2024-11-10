@@ -7,8 +7,8 @@ function App() {
   const [maxNumber, setMaxNumber] = useState(5);
   const [showSettings, setShowSettings] = useState(false);
   const [selectedShape, setSelectedShape] = useState<ShapeType>('heart');
-  const [showSolution, setShowSolution] = useState(true); // 新增的属性
-  const [numQuestions, setNumQuestions] = useState(100); // 新增的属性
+  const [showSolution, setShowSolution] = useState(true); // 是否展示题解
+  const [numQuestions, setNumQuestions] = useState(100); // 题目数量
 
   const shapes: { value: ShapeType; label: string }[] = [
     { value: 'circle', label: '圆形' },
@@ -25,7 +25,13 @@ function App() {
             if(showSolution){
                pairs.push({ number: n.toString(), left: `${i}`, right: `${n - i}` });
             }else{
-              pairs.push({ number: n.toString(), left: "", right: "" });
+              const fieldToReplace = Math.floor(Math.random() * 3); // 0 for number, 1 for left, 2 for right
+              let randomValue = '';
+              pairs.push({
+                number: fieldToReplace === 0 ? randomValue : n.toString(),
+                left: fieldToReplace === 1 ? randomValue : i.toString(),
+                right: fieldToReplace === 2 ? randomValue : (n - i).toString()
+              });
             }
           }
         }
@@ -138,16 +144,16 @@ function App() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 pt-24 pb-8">
-      <div className="text-center font-bold" >{maxNumber}以内的分解</div>
+        <h2 className="text-xl text-center font-semibold text-gray-900">{maxNumber}以内的分解</h2>
         <div className="flex items-center justify-between mb-10 font-bold">
             <div>姓名：__________</div>
             <div>分数：_________</div>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {allDecompositions.map((decomp, index) => (
             <div 
               key={`${decomp.number}-${decomp.left}-${decomp.right}-${index}`}
-              className="bg-white rounded-xl shadow-sm p-6 hover:shadow-md transition-shadow flex items-center justify-center"
+              className="bg-white rounded-xl shadow-sm p-4 hover:shadow-md transition-shadow flex items-center justify-center"
             >
               <NumberTree
                 number={decomp.number}
